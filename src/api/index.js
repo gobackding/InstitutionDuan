@@ -2,16 +2,7 @@ import http from "@utils/http";
 import axios from "@utils/axios";
 import Cookies from "js-cookie";
 export const booksListApi = () => http.get(`${window.apiUrl}/review/rules/SearchRules`)
-// 分页器获取数据
-export const pagingListApi = (pages) => http.get(`${window.apiUrl}/review/rules/SearchRules`, {
-    'page': pages.pageNumber,
-    'dataFieldCode': pages.dataFieldCode,
-    'ruleDesc': pages.ruleDesc,
-    'ruleImp': pages.ruleImp,
-    'ruleSeq': pages.ruleSeq,
-    'srcTabNameCn': pages.srcTabNameCn,
-    'srcTabNameEn': pages.srcTabNameEn
-})
+
 // 删除
 export const DeteteValueApi = (index) => http.get(`${window.apiUrl}/review/rules/DeleteRules`, {
     'ids': index
@@ -23,7 +14,8 @@ export const conditionApi = (val) => http.get(`${window.apiUrl}/review/rules/Sea
     'srcTabNameCn': val.srcTabNameCn,
     'srcTabNameEn': val.srcTabNameEn,
     'dataFieldCode': val.dataFieldCode,
-    'ruleImp': val.ruleImp
+    'ruleImp': val.ruleImp,
+    'page':val.page
 })
 // 修改
 export const UpdaterulesApi = ({ ...val }) => http.post(`${window.apiUrl}/review/rules/UpdateRules`, {

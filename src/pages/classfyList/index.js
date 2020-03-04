@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Form, Table, Radio } from "antd"
+import { Form, Table, Radio,message } from "antd"
 import QueryFunction from "./queryFunction"
 import { conditionApi, JHKSLBZS, JHCHLIST, ceshidata } from "@api"
 import { SJJHZYX, DAFAULTSEQTIME } from "@api/ClassfyList"
@@ -35,7 +35,7 @@ class classfyList extends React.Component {
             ClickBool: false,
             CheckingDataValue: {},
             standardTypeValue: '',
-            EditUserName:''
+            EditUserName: ''
         }
     }
     onSelectChange = selectedRowKeys => {
@@ -150,7 +150,7 @@ class classfyList extends React.Component {
                         }
                         <div style={{ padding: '10px' }}>
                             <QueryFunction
-                            ceshiClick={this.ceshiClick.bind(this)}
+                                ceshiClick={this.ceshiClick.bind(this)}
                                 queryfunction={this.QueryFromList.bind(this)}
                                 rewviewFromList={this.RewviewFromList.bind(this)}
                                 queryFromBool={this.QueryFromListBool.bind(this)}
@@ -235,12 +235,12 @@ class classfyList extends React.Component {
                 data: ArrayListValue,
                 currPage: data.data.currPage,
                 totalCount: data.data.totalCount,
-                pageBool:true
+                pageBool: true
             })
-        }else{
+        } else {
             this.setState({
-                EditUserName:data.msg,
-                pageBool:false
+                EditUserName: data.msg,
+                pageBool: false
             })
         }
         // 获取重要性
@@ -250,7 +250,7 @@ class classfyList extends React.Component {
     ResetClick() {
         this.HandlerValue()
     }
-    async ceshiClick(val){
+    async ceshiClick(val) {
         let Aggregate = {}
         let BoolArray = []
         let FromList = []
@@ -274,6 +274,7 @@ class classfyList extends React.Component {
     }
     // 触发了检核数据的操作
     async QueryFromListBool(val) {
+        localStorage.setItem('review', JSON.stringify(1))
         this.props.history.push("/DataChecking/CheckingUp")
         let Aggregate = {}
         let BoolArray = []
@@ -290,11 +291,11 @@ class classfyList extends React.Component {
         Aggregate.endDate = val.endDate
         Aggregate.ids = BoolArray
         console.log(Aggregate, '请求之前')
-        let data = await ceshidata(Aggregate)
+        ceshidata(Aggregate)
         // if(data.msg == '成功'){
-        let FromName = this.$encryptionData('review')
-        let FromListSum = this.$encryptionData(1)
-        localStorage.setItem(FromName, JSON.stringify(FromListSum))
+        // let FromName = this.$encryptionData('review')
+        // let FromListSum = this.$encryptionData(1)
+        
 
         // }
 
@@ -362,21 +363,26 @@ class classfyList extends React.Component {
     };
     // 查询按钮
     async QueryFromList(val) {
-        console.log(val, "898989")
-        let QueryFromListValue = await JHCHLIST(val)
-        console.log(QueryFromListValue, "QueryFromListValue")
-
-        let ArrayListValue = []
-        for (var i = 0; i < QueryFromListValue.data.length; i++) {
-            QueryFromListValue.data[i].bool = true
-            if (QueryFromListValue.data[i].ruleType != '废弃') {
-                ArrayListValue.push(QueryFromListValue.data[i])
+        if(val.stantTypeValue == ''){
+            this.error()
+        }else{
+            let QueryFromListValue = await JHCHLIST(val)
+            let ArrayListValue = []
+            for (var i = 0; i < QueryFromListValue.data.length; i++) {
+                QueryFromListValue.data[i].bool = true
+                if (QueryFromListValue.data[i].ruleType != '废弃') {
+                    ArrayListValue.push(QueryFromListValue.data[i])
+                }
             }
+            this.setState({
+                data: ArrayListValue
+            })
         }
-        this.setState({
-            data: ArrayListValue
-        })
+        
     }
+    error = () => {
+        message.error('请选择您的版本');
+      }
     RewviewFromList(val) {
 
     }

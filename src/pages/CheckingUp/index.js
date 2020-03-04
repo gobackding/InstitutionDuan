@@ -32,7 +32,8 @@ class CheckingUp extends React.Component {
             ErrorValue: 0,//失败数
             TrueValue: 0,//成功数
             ChickTime: 0,
-            queryTotalStatus: 0
+            queryTotalStatus: 0,
+           
         }
     }
     render() {
@@ -140,7 +141,7 @@ class CheckingUp extends React.Component {
     }
     componentDidMount() {
         this.setIntervalValue(true)
-        let ReviewId = this.$decryptData(JSON.parse(localStorage.getItem(this.$encryptionData('review'))))
+        let ReviewId = JSON.parse(localStorage.getItem('review'))
         console.log(ReviewId)
         if (ReviewId == 1) {
             this.setState({
@@ -157,7 +158,7 @@ class CheckingUp extends React.Component {
         let Time = setInterval(async function () {
             console.log(_this.state.queryTotalStatus,_this.state.queryTotalSeq)
             if (_this.state.queryTotalStatus == _this.state.queryTotalSeq) {
-                localStorage.setItem(_this.$encryptionData('review'), JSON.stringify(_this.$encryptionData(0)))
+                localStorage.setItem('review', JSON.stringify(0))
                 clearInterval(Time)
             }
             let Array = []

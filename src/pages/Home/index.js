@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react"
 import { Table, Button, Divider, Form, Pagination, message, Modal } from 'antd';
-import { booksListApi, pagingListApi, DeteteValueApi, conditionApi } from "@api/index"
+import { booksListApi, DeteteValueApi, conditionApi } from "@api/index"
 import { HomeStyled } from "./styled"
 import FromList from "./FormList/index"
 import EditFrom from "./EditFrom/index"
@@ -40,7 +40,15 @@ class Home extends Component {
             Abolish: {},//废除的单条数据
             selectList: [],
             pageBool: false,
-            pagetitle: ''
+            pagetitle: '',
+            queryData: {
+                ruleSeq: "",
+                ruleDesc: "",
+                srcTabNameCn: "",
+                srcTabNameEn: "",
+                dataFieldCode: "",
+                ruleImp: ""
+            }
         }
     }
     onSelectChange = selectedRowKeys => {
@@ -328,13 +336,13 @@ class Home extends Component {
             }
             this.setState({
                 selectList: Array,
-                pageBool:true
+                pageBool: true
             })
             this.HandlerValue()
-        }else{
+        } else {
             this.setState({
-                pageBool:false,
-                pagetitle:data.msg
+                pageBool: false,
+                pagetitle: data.msg
             })
         }
     }
@@ -500,33 +508,26 @@ class Home extends Component {
         console.log(value, "规则类型筛选")
     }
     // 分页
-    async onChange(pageNumber) {
-        let FromList = this.state.FromList
-        FromList.pageNumber = pageNumber
-        FromList.dataFieldCode = ""
-        FromList.ruleDesc = ""
-        FromList.ruleImp = ""
-        FromList.ruleSeq = ""
-        FromList.srcTabNameCn = ""
-        FromList.srcTabNameEn = ""
-        let data = await pagingListApi(FromList)
-        console.log(data)
+    onChange(pageNumber) {
         this.setState({
-            data: data.data.list,
-            currPage: data.data.currPage
+            currPage:pageNumber
+        },()=>{
+            this.queryPageData()
         })
     }
     // 筛选传过来的数据  
-    async FromListValue(val) {
-        let FromList = this.state.FromList
-        FromList.dataFieldCode = val.dataFieldCode
-        FromList.ruleDesc = val.ruleDesc
-        FromList.ruleImp = val.ruleImp
-        FromList.ruleSeq = val.ruleSeq
-        FromList.srcTabNameCn = val.srcTabNameCn
-        FromList.srcTabNameEn = val.srcTabNameEn
-        console.log(FromList, "FromList")
-        let data = await conditionApi(val)
+    FromListValue(val) {
+        this.setState({
+            queryData: { ...val }
+        },()=>{
+            this.queryPageData()
+        })
+       
+    }
+    // 分页+查询获取数据
+    async queryPageData(){
+        let obj = {...this.state.queryData,page:this.state.currPage}
+        let data = await conditionApi(obj)
         console.log(data)
         this.setState({
             data: data.data.list,
