@@ -55,28 +55,28 @@ class Privilege extends React.Component {
                 id: 2,
                 title: '权限名称',
                 dataIndex: 'name',
-                align: 'center',
+                align: 'left',
                 ellipsis: true,
             },
             {
                 id: 4,
                 title: '描述',
                 dataIndex: 'description',
-                align: 'center',
+                align: 'left',
                 ellipsis: true,
             },
             {
                 id: 5,
                 title: '创建时间',
                 dataIndex: 'createTime',
-                align: 'center',
+                align: 'left',
                 ellipsis: true,
                 width: '150px'
             },
             {
                 title: '操作',
                 dataIndex: 'operation',
-                align: 'center',
+                align: 'left',
                 key: 'operation',
                 width: "150px",
                 ellipsis: true,
@@ -119,7 +119,7 @@ class Privilege extends React.Component {
 
                             <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} onChange={this.onChange.bind(this)} />
                         </div>
-                        
+
                         <Modal
                             title="新增权限"
                             visible={this.state.NewlyBool}
@@ -219,26 +219,58 @@ class Privilege extends React.Component {
     // 获取数据
     async DafaultData(obj) {
         let data = await WHOLEDATALIST(obj)
-        console.log(data)
+        console.log(data, 'data')
         let List = data.data
         let array = []
-        for( var i = 0 ; i<List.length ; i++ ){
-            if(List[i].parentId == 0){
-                List[i].children=[]
-                List[i].key = List[i].id
-                array.push(List[i])
+        let bool = List.find(function (value) {
+            if (value.type == 0) {
+                return '存在一级'
+            }if (value.type == 1) {
+                return '存在二级'
+            }if (value.type == 2) {
+                return '存在二级'
+            }
+        })
+        if (bool.type == 0) {
+            for (var i = 0; i < List.length; i++) {
+                if (List[i].type == 0) {
+                    List[i].children = []
+                    List[i].key = List[i].id
+                    array.push(List[i])
+                    continue
+                }
+            }
+        }else if(bool.type == 1){
+            for (var i = 0; i < List.length; i++) {
+                if (List[i].type == 1) {
+                    List[i].children = []
+                    List[i].key = List[i].id
+                    array.push(List[i])
+                    continue
+                }
+            }
+        }else if(bool.type == 2){
+            for (var i = 0; i < List.length; i++) {
+                if (List[i].type == 2) {
+                    List[i].children = []
+                    List[i].key = List[i].id
+                    array.push(List[i])
+                    continue
+                }
             }
         }
-        for( var j = 0 ; j<array.length ; j++ ){
-            for( var k = 0 ; k<List.length ; k++ ){
-                if(array[j].id == List[k].parentId){
+        console.log(bool, '898989ni')
+
+        for (var j = 0; j < array.length; j++) {
+            for (var k = 0; k < List.length; k++) {
+                if (array[j].id == List[k].parentId) {
                     List[k].children = []
                     List[k].key = List[k].id
                     array[j].children.push(List[k])
                 }
-                if( array[j].children ){
-                    for(var t = 0 ; t<array[j].children.length ; t++){
-                        if(array[j].children[t].id == List[k].parentId){
+                if (array[j].children) {
+                    for (var t = 0; t < array[j].children.length; t++) {
+                        if (array[j].children[t].id == List[k].parentId) {
                             array[j].children[t].key = array[j].children[t].id
                             List[k].key = List[k].id
                             array[j].children[t].children.push(List[k])
@@ -247,7 +279,7 @@ class Privilege extends React.Component {
                 }
             }
         }
-        console.log(array,'ceshi')
+        console.log(array, 'ceshi')
         if (data.data) {
             this.setState({
                 pageBool: true,
@@ -355,7 +387,10 @@ class Privilege extends React.Component {
         console.log(val, 'pp')
         let data = await DELETEID(val.id)
         if (data.msg == '成功') {
+            this.success('删除成功')
             this.handleOk()
+        } else {
+            this.error(data.msg)
         }
     }
 
@@ -423,6 +458,12 @@ class Privilege extends React.Component {
         this.setState({
             description: e.target.value
         })
+    }
+    success = (val) => {
+        message.success(val);
+    }
+    error = (val) => {
+        message.error(val);
     }
 }
 export default Privilege

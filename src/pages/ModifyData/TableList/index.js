@@ -88,7 +88,7 @@ class TableList extends React.Component {
                 render: (text, record) => {
                     // if (record.type == '默认采集规则版本' || record.type == '默认采集日期' || record.type == '文件路径' || record.type == '业务数据库名称' || record.type == '区域代码') {
                     return <span>
-                        <a onClick={this.EditHandlerValue.bind(this, text, record)}>修改</ a>
+                        <a onClick={this.EditHandlerValue.bind(this, text, record)}>参数管理</ a>
                         <Divider type='vertical' />
                         <a onClick={this.SeeLookValue.bind(this, text, record)}>查看</ a>
                     </span>
