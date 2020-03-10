@@ -144,7 +144,8 @@ class SBAdministration extends React.Component {
                                     }
                                 </Select>
                                 <Button type="primary" style={{ margin: '6px' }} onClick={this.QueryData.bind(this)}>生成报告</Button>
-                            </div>
+                                    <Button type='primary' style={{marginLeft:'20px'}} onClick={this.NewClickExcel.bind(this)}>导出excel</Button>
+                                </div>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Input placeholder="请选择导出数量"
                                     value={this.state.dcdatasum}
@@ -295,38 +296,11 @@ class SBAdministration extends React.Component {
                 clearInterval(stateusetTime)
             }
         }, 10000)
-
-
         // 点击上传的数据
         let data = await ReUploadApi(obj)
         if (data.code == -1) {
             clearInterval(stateusetTime)
         }
-        console.log(data)
-        // 获取状态
-
-
-
-        // Axios({
-        //     url: `${window.apiUrl}/review/Appear/ftpUpload`,
-        //     method: 'post',
-        //     responseType: 'blob',
-        //     headers: {
-        //         'token': Cookies.get('67ae207794a5fa18fff94e9b62668e5c'),
-        //         "content-type": "application/json"
-        //     },
-        //     params: {
-        //         'fileList': JSON.stringify(obj.arry),
-        //         'status':obj.bool
-        //     }
-        // }).then(({ data }) => {
-        //     console.log(data, '132')
-        //     // const blob = new Blob([data], { type: 'application/vnd.ms-excel;charset=utf-8' })
-        //     // var link = document.createElement('a')
-        //     // link.href = window.URL.createObjectURL(blob)
-        //     // link.download = _this.state.calendarTime + '.xls'
-        //     // link.click()
-        // })
     }
     // 轮次的下拉
     handleChange(value) {
@@ -522,6 +496,40 @@ class SBAdministration extends React.Component {
         this.setState({
             ReverseChecking: false
         })
+    }
+    // 附加导出excel
+    NewClickExcel(){
+        let _this = this
+        let queryData = {}
+        let Time = this.state.calendarTime
+        let Array = Time.split("-")
+        console.log(Array)
+        let str = ""
+        for (var i = 0; i < Array.length; i++) {
+            str += Array[i]
+        }
+        queryData.Time = str
+        queryData.SelectValue = this.state.SelectValue
+        Axios({
+            url: `${window.apiUrl}/review/Appear/exportFileNameReport`,
+            method: 'get',
+            responseType: 'blob',
+            headers: {
+                'token': Cookies.get("67ae207794a5fa18fff94e9b62668e5c").split('"')[1]
+            },
+            params: {
+                'cjrq': queryData.Time,
+                'jclc': queryData.SelectValue
+            }
+        }).then(({ data }) => {
+            console.log(data, '132')
+            const blob = new Blob([data], { type: 'application/vnd.ms-excel;charset=utf-8' })
+            var link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = queryData.Time + '.excel'
+            link.click()
+        })
+        
     }
     // 点击生成报告，获取日历-轮次
     async QueryData() {

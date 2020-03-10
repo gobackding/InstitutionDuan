@@ -1,6 +1,6 @@
 import { Home, Login, Sign, ClassfyList, Administration, CheckingUp, FileManagement,
-     SBAdministration, Historical,ModifyData,Dafaultdelete,Role,Privilege } from "@pages/index.js"
-import { JHLSFX,SubmitReport ,GeneratingCharts} from "@components/index"
+     SBAdministration, Historical,ModifyData,Dafaultdelete,Role,Privilege,BankInformation } from "@pages/index.js"
+import { JHLSFX,SubmitReport ,GeneratingCharts,Ceshi} from "@components/index"
 
 import { XTGLPage, DataChecking,UserInterface ,UserChoice} from "@lib/MainPage"
 export const PagesComponent = [
@@ -192,6 +192,22 @@ export const layoutRoute = [
                 icon: "unordered-list",
                 name: "规则管理",
                 component: Home
+            },
+            {
+                key: "/XTGLPage/BankInformation",
+                path: "/XTGLPage/BankInformation",
+                class:'BankInformation',
+                icon: "BankOutlined",
+                name: "银行信息",
+                component: BankInformation
+            },
+            {
+                key: "/XTGLPage/Ceshi",
+                path: "/XTGLPage/Ceshi",
+                class:'Ceshi',
+                icon: "unordered-list",
+                name: "测试",
+                component: Ceshi
             }
         ]
     },

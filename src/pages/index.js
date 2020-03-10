@@ -57,9 +57,13 @@ const Privilege = reactLoadable({
     loader:()=>import('./Privilege'),
     loading:Loading
 })
+const BankInformation = reactLoadable({
+    loader:()=>import('./BankInformation'),
+    loading:Loading
+})
 
 export {
     Home,Login,Sign,ClassfyList,Supervise,Administration,
     CheckingUp,FileManagement,SBAdministration,Historical,
-    ModifyData,Dafaultdelete,Role,Privilege
+    ModifyData,Dafaultdelete,Role,Privilege,BankInformation
 }

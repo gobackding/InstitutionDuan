@@ -147,8 +147,10 @@ class FromList extends React.Component {
             srcTabNameEn: "",
             dataFieldCode: "",
             ruleImp: ""
+        },()=>{
+            this.props.clearClickValue(this.state)
         })
-        this.props.clearClickValue()
+        
     }
     // 请填写目标字段
     dataFieldCodeValue(e) {

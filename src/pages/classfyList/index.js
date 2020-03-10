@@ -150,7 +150,6 @@ class classfyList extends React.Component {
                         }
                         <div style={{ padding: '10px' }}>
                             <QueryFunction
-                                ceshiClick={this.ceshiClick.bind(this)}
                                 queryfunction={this.QueryFromList.bind(this)}
                                 rewviewFromList={this.RewviewFromList.bind(this)}
                                 queryFromBool={this.QueryFromListBool.bind(this)}
@@ -227,7 +226,7 @@ class classfyList extends React.Component {
             let ArrayListValue = []
             for (var i = 0; i < data.data.length; i++) {
                 data.data[i].bool = true
-                if (data.data[i].ruleType != '废弃') {
+                if (data.data[i].status != 2) {
                     ArrayListValue.push(data.data[i])
                 }
             }
@@ -250,28 +249,7 @@ class classfyList extends React.Component {
     ResetClick() {
         this.HandlerValue()
     }
-    async ceshiClick(val) {
-        let Aggregate = {}
-        let BoolArray = []
-        let FromList = []
-        let FromListBool = this.state.data
-
-        for (var i = 0; i < FromListBool.length; i++) {
-            if (FromListBool[i].bool) {
-                BoolArray.push(FromListBool[i].id)
-                FromList.push(FromListBool[i])
-            }
-        }
-        Aggregate.beginDate = val.beginDate
-        Aggregate.endDate = val.endDate
-        Aggregate.ids = BoolArray
-        console.log(Aggregate, '请求之前')
-        ceshidata(Aggregate)
-        // if(data.msg == '成功'){
-        let FromName = this.$encryptionData('review')
-        let FromListSum = this.$encryptionData(1)
-        localStorage.setItem(FromName, JSON.stringify(FromListSum))
-    }
+  
     // 触发了检核数据的操作
     async QueryFromListBool(val) {
         localStorage.setItem('review', JSON.stringify(1))
@@ -292,12 +270,6 @@ class classfyList extends React.Component {
         Aggregate.ids = BoolArray
         console.log(Aggregate, '请求之前')
         ceshidata(Aggregate)
-        // if(data.msg == '成功'){
-        // let FromName = this.$encryptionData('review')
-        // let FromListSum = this.$encryptionData(1)
-        
-
-        // }
 
     }
     // 进行数据检核的函数
@@ -367,10 +339,13 @@ class classfyList extends React.Component {
             this.error()
         }else{
             let QueryFromListValue = await JHCHLIST(val)
+
             let ArrayListValue = []
             for (var i = 0; i < QueryFromListValue.data.length; i++) {
                 QueryFromListValue.data[i].bool = true
+              
                 if (QueryFromListValue.data[i].ruleType != '废弃') {
+                    
                     ArrayListValue.push(QueryFromListValue.data[i])
                 }
             }
