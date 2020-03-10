@@ -304,7 +304,7 @@ class Home extends Component {
         let data = await DeteteValueApi(arr)
         console.log(data, "删除")
         if (data.msg == "成功") {
-            this.HandlerValue()
+            this.queryPageData()
             this.success(data.msg)
         }
         this.setState({
@@ -318,8 +318,14 @@ class Home extends Component {
         })
     }
     // 清除后重新加载数据
-    clearClickValue() {
-        this.HandlerValue()
+    clearClickValue(val) {
+        this.setState({
+            currPage:1,
+            queryData:{...val}
+        },()=>{
+            console.log(this.state.queryData,'qu')
+            this.queryPageData()
+        }) 
     }
     async componentDidMount() {
         let data = await SEQSELECT()
@@ -338,7 +344,7 @@ class Home extends Component {
                 selectList: Array,
                 pageBool: true
             })
-            this.HandlerValue()
+            this.queryPageData()
         } else {
             this.setState({
                 pageBool: false,
@@ -362,7 +368,7 @@ class Home extends Component {
         let data = await DeteteValueApi(DeleteId)
         console.log(data)
         if (data.code == 0) {
-            this.HandlerValue()
+            this.queryPageData()
             this.success(data.msg)
         }
     }
@@ -447,7 +453,7 @@ class Home extends Component {
             this.setState({
                 AbolishBool: false
             }, () => {
-                this.HandlerValue()
+                this.queryPageData()
                 this.success(Abandon.msg)
             })
         } else {
@@ -518,7 +524,8 @@ class Home extends Component {
     // 筛选传过来的数据  
     FromListValue(val) {
         this.setState({
-            queryData: { ...val }
+            queryData: { ...val },
+            currPage:1
         },()=>{
             this.queryPageData()
         })

@@ -340,7 +340,8 @@ class FileManagement extends React.Component {
                     DisplayData[i].bool = false
                 } else {
                     // 查出下标
-                    let data = DisplayData[i].papersName.split(':')[1]
+                    let data = DisplayData[i].papersName.split('/')
+                    data = data[data.length-1]
                     let Suffix = data.split('.')[0]
                     var index = Suffix.lastIndexOf("\\");
                     Suffix = Suffix.substring(index + 1, Suffix.length);

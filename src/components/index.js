@@ -29,6 +29,10 @@ const GeneratingCharts = reactLoadable({
     loader:()=>import('./supervise/JHLSFX/GeneratingCharts'),
     loading:Loading
 })
+const Ceshi = reactLoadable({
+    loader:()=>import('./ceshi'),
+    loading:Loading
+})
 export {
-    Exhibition,Import,LowerHair,GenerateReport,JHLSFX,SubmitReport,GeneratingCharts
+    Exhibition,Import,LowerHair,GenerateReport,JHLSFX,SubmitReport,GeneratingCharts,Ceshi
 }
